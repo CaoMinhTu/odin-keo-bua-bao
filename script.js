@@ -9,7 +9,6 @@ function getComputerChoice() {
 function playRound(playerSelection, computerSelection) {
     /* trả về giá trị -1 nếu người chơi thắng, 1 nếu máy tinh thắng, 0 nếu hòa
 
-    CHUYỂN playerSelection về dạng proper case để có thể so sánh với các giá trị đã có
 
     NẾU playerSelection bằng với computerSelection THÌ
         TRẢ VỀ giá trị 0
@@ -30,9 +29,6 @@ function playRound(playerSelection, computerSelection) {
     KẾT THÚC NẾU
     */
 
-    // chuyển playerSelection về dạng proper case để có thể so sánh với các giá trị đã có
-    playerSelection = playerSelection[0].toLocaleUpperCase() + playerSelection.slice(1).toLocaleLowerCase();
-
     if (playerSelection === computerSelection) {
         return 0;
     }
@@ -47,5 +43,72 @@ function playRound(playerSelection, computerSelection) {
         || (playerSelection === 'Bao' && computerSelection === 'Búa')
         || (playerSelection === 'Kéo' && computerSelection === 'Bao')) {
         return -1; // người chơi thắng
+    }
+}
+
+function game() {
+    /* cho người chơi đấu với máy tính 5 lần và in ra kết quả */
+
+    /*
+    TẠO BIẾN sốLầnMáyTínhThắng với giá trị ban đầu bằng 0
+    TẠO BIẾN sốLầnNgườiChơiThắng với giá trị ban đầu bằng 0
+    LẶP 5 lần
+        TẠO BIẾN roundResult chứa giá trị 0
+        KHI roundResult bằng 0
+            HỎI lựa chọn của người chơi và lưu vào biến playerSelection
+            CHUYỂN playerSelection về dạng proper case để có thể so sánh với các giá trị đã có
+            GỌI hàm getComputerChoice và lưu kết quả vào biến computerSelection
+            GỌI HÀM playRound với playerSelection và computerSelection, lưu kết quả vào roundResult
+            TRƯỜNG HỢP roundResult BẰNG
+                0:
+                    IN thông báo 'hòa, hãy chọn lại'
+                1:
+                    IN thông báo 'máy tính thắng'
+                    TĂNG biến sốLầnMáyTínhThắng thêm 1
+                -1:
+                    IN thông báo 'bạn thắng'
+                    TĂNG biến sốLầnNgườiChơiThắng thêm 1
+            KẾT THÚC TRƯỜNG HỢP
+        KẾT THÚC KHI
+    KẾT THÚC LẶP
+    NẾU sốLầnMáyTínhThắng lớn hơn sốLầnNgườiChơiThắng THÌ
+        IN thông báo 'kết quả chung cuộc: máy tính thắng'
+    KHÁC
+        IN thông báo 'kết quả chung cuộc: bạn thắng'
+    KẾT THÚC NẾU
+    */
+
+    let sốLầnMáyTínhThắng = 0;
+    let sốLầnNgườiChơiThắng = 0;
+    for (let i = 0; i < 5; i++) {
+        let roundResult = 0;
+        while (roundResult === 0) {
+            let playerSelection = prompt('Nhập một trong 3 giá trị "Kéo", "Búa", "Bao"');
+
+            // chuyển playerSelection về dạng proper case để có thể so sánh với các giá trị đã có
+            playerSelection = playerSelection[0].toLocaleUpperCase()
+                                + playerSelection.slice(1).toLocaleLowerCase();
+
+            let computerSelection = getComputerChoice();
+            roundResult = playRound(playerSelection, computerSelection);
+            switch(roundResult) {
+                case 0:
+                    console.log(`Bạn ra "${playerSelection}", máy tính ra "${computerSelection}" - hòa, chơi lại`);
+                    break;
+                case 1:
+                    console.log(`Bạn ra "${playerSelection}", máy tính ra "${computerSelection}" - máy tính thắng`);
+                    sốLầnMáyTínhThắng++;
+                    break;
+                case -1:
+                    console.log(`Bạn ra "${playerSelection}" Máy tính ra "${computerSelection}" - bạn thắng`);
+                    sốLầnNgườiChơiThắng++;
+                    break;
+            }
+        }
+    }
+    if (sốLầnMáyTínhThắng > sốLầnNgườiChơiThắng) {
+        console.log(`Kết quả chung cuộc: máy tính thắng ${sốLầnMáyTínhThắng} - ${sốLầnNgườiChơiThắng}`);
+    } else {
+        console.log(`Kết quả chung cuộc: bạn thắng ${sốLầnNgườiChơiThắng} - ${sốLầnMáyTínhThắng}`);
     }
 }
