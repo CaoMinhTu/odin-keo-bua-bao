@@ -112,3 +112,5 @@ function game() {
         console.log(`Kết quả chung cuộc: bạn thắng ${sốLầnNgườiChơiThắng} - ${sốLầnMáyTínhThắng}`);
     }
 }
+
+game();
