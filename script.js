@@ -113,4 +113,138 @@ function game() {
     }
 }
 
-game();
+// game();
+
+const SỐ_LẦN_THẮNG_CẦN_CÓ = 5; // mỗi người chơi phải đạt số lần thắng này để được tuyên bố là thắng cả ván
+
+let tròChơiĐãBắtĐầu = false;
+
+let sốLầnMáyTínhThắng = 0;
+let sốLầnNgườiChơiThắng = 0;
+
+const spanMáyTínhRa = document.querySelector('#máyTínhRa');
+const spanKếtQuảLầnChơi = document.querySelector('#kếtQuảLầnChơi');
+
+const spanĐiểmCủaNgườiChơi = document.querySelector('#điểmCủaNgườiChơi');
+const spanĐiểmCủaMáyTính = document.querySelector('#điểmCủaMáyTính');
+const spanBênThắngToànVán = document.querySelector('#bênThắngToànVán');
+
+const btnKéo = document.querySelector('#kéo');
+const btnBúa = document.querySelector('#búa');
+const btnBao = document.querySelector('#bao');
+const btnBắtĐầu = document.querySelector('#bắtĐầu');
+
+function resetMàuCủa3NútBànTay() {
+    btnKéo.style.backgroundColor = null;
+    btnBúa.style.backgroundColor = null;
+    btnBao.style.backgroundColor = null;    
+}
+
+btnBắtĐầu.addEventListener('click', () => {
+    sốLầnMáyTínhThắng = 0;
+    sốLầnNgườiChơiThắng = 0;
+
+    spanĐiểmCủaNgườiChơi.textContent = sốLầnNgườiChơiThắng;
+    spanĐiểmCủaMáyTính.textContent = sốLầnMáyTínhThắng;
+    spanMáyTínhRa.textContent = '';
+
+    resetMàuCủa3NútBànTay();
+
+    tròChơiĐãBắtĐầu = true;
+});
+
+function cậpNhậtTỷSố() {
+    /* Cập nhật tỷ số của người chơi, tuyên bố thắng cuộc nếu 1 trong 2 bên đạt SỐ_LẦN_THẮNG_CẦN_CÓ
+        và dừng cuộc chơi */
+
+    /*
+    CẬP NHẬT giá trị hiển thị của spanĐiểmCủaNgườiChơi là biến sốLầnNgườiChơiThắng
+    CẬP NHẬT giá trị hiển thị của spanĐiểmCủaMáyTính là biến sốLầnMáyTínhThắng
+
+    NẾU sốLầnNgườiChơiThắng bằng SỐ_LẦN_THẮNG_CẦN_CÓ
+        CẬP NHẬT giá trị hiển thị của spanBênThắngToànVán là 'Bạn thắng'
+        GÁN giá trị false cho biến tròChơiĐãBắtĐầu
+
+    NẾU sốLầnMáyTínhThắng bằng SỐ_LẦN_THẮNG_CẦN_CÓ
+        CẬP NHẬT giá trị hiển thị của spanBênThắngToànVán là 'Máy tính thắng'
+        GÁN giá trị false cho biến tròChơiĐãBắtĐầu
+    */
+
+    spanĐiểmCủaNgườiChơi.textContent = sốLầnNgườiChơiThắng;
+    spanĐiểmCủaMáyTính.textContent = sốLầnMáyTínhThắng;
+
+    if (sốLầnNgườiChơiThắng === SỐ_LẦN_THẮNG_CẦN_CÓ) {
+        spanBênThắngToànVán.textContent = 'Bạn thắng';
+        tròChơiĐãBắtĐầu = false;
+    }
+
+    if (sốLầnMáyTínhThắng === SỐ_LẦN_THẮNG_CẦN_CÓ) {
+        spanBênThắngToànVán.textContent = 'Máy tính thắng';
+        tròChơiĐãBắtĐầu = false;
+    }
+}
+
+function playRound2(ngườiChơiRa) {
+    /*
+    ĐẶT BIẾN máyTínhRa là kết quả của hàm getComputerChoice
+    CẬP NHẬT giá trị hiển thị của spanMáyTínhRa là biến máyTínhRa
+    ĐẶT BIẾN kếtQuảLầnChơi nhận kết quả của hàm playRound với đối số là biến ngườiChơiRa và máyTínhRa
+    TRƯỜNG HỢP kếtQuảLầnChơi ĐẠT
+        giá trị 0:
+            GÁN giá trị hiển thị của spanKếtQuảLầnChơi là 'Hòa'
+        giá trị 1:
+            GÁN giá trị hiển thị của spanKếtQuảLầnChơi là 'Máy tính thắng'
+            TĂNG biến sốLầnMáyTínhThắng lên 1
+            GỌI HÀM cậpNhậtTỷSố
+        giá trị -1:
+            GÁN giá trị hiển thị của spanKếtQuảLầnChơi là 'Bạn thắng'
+            TĂNG biến sốLầnNgườiChơiThắng lên 1
+            GỌI HÀM cậpNhậtTỷSố
+    KẾT THÚC TRƯỜNG HỢP
+    */
+
+    let máyTínhRa = getComputerChoice();
+    spanMáyTínhRa.textContent = máyTínhRa;
+    let kếtQuảLầnChơi = playRound(ngườiChơiRa, máyTínhRa);
+
+    switch (kếtQuảLầnChơi) {
+        case 0:
+            spanKếtQuảLầnChơi.textContent = 'Hòa';
+            break;
+        case 1:
+            spanKếtQuảLầnChơi.textContent = 'Máy tính thắng';
+            sốLầnMáyTínhThắng++;
+            cậpNhậtTỷSố();
+            break;
+        case -1:
+            spanKếtQuảLầnChơi.textContent = 'Bạn thắng';
+            sốLầnNgườiChơiThắng++;
+            cậpNhậtTỷSố();
+            break;
+    }
+}
+
+btnKéo.addEventListener('click', () => {
+    if (tròChơiĐãBắtĐầu) {
+        resetMàuCủa3NútBànTay();
+        playRound2('Kéo');
+        btnKéo.style.backgroundColor = 'lime';
+    }
+});
+
+btnBúa.addEventListener('click', () => {
+    if (tròChơiĐãBắtĐầu) {
+        resetMàuCủa3NútBànTay();
+        playRound2('Búa');
+        btnBúa.style.backgroundColor = 'lime';
+    }
+});
+
+btnBao.addEventListener('click', () => {
+    if (tròChơiĐãBắtĐầu) {
+        resetMàuCủa3NútBànTay();
+        playRound2('Bao');
+        btnBao.style.backgroundColor = 'lime';
+    }
+});
+
