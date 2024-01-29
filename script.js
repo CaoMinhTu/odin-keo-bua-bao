@@ -148,6 +148,10 @@ btnBắtĐầu.addEventListener('click', () => {
     spanĐiểmCủaMáyTính.textContent = sốLầnMáyTínhThắng;
     spanMáyTínhRa.textContent = '';
 
+    spanKếtQuảLầnChơi.textContent = '';
+    spanBênThắngToànVán.textContent = '';
+
+
     resetMàuCủa3NútBànTay();
 
     tròChơiĐãBắtĐầu = true;
